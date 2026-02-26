@@ -158,17 +158,17 @@ export function SquadBuilder({ squad, settings, userId }: SquadBuilderProps) {
         : budgets.reserves.remaining;
 
   return (
-    <div className="flex h-[calc(100vh-3rem)] flex-col">
+    <div className="flex flex-col md:h-[calc(100vh-3rem)]">
       {/* Header */}
       <div className="mb-4 flex items-center gap-3">
-        <h1 className="text-2xl font-bold tracking-tight">{squad.name}</h1>
+        <h1 className="text-xl font-bold tracking-tight md:text-2xl">{squad.name}</h1>
         {isPending && (
           <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
         )}
       </div>
 
       {/* Main content — three columns filling remaining viewport height */}
-      <div className="grid min-h-0 flex-1 gap-6 lg:grid-cols-[2fr_1fr_1fr]">
+      <div className="grid min-h-0 flex-1 gap-4 md:gap-6 lg:grid-cols-[2fr_1fr_1fr]">
         {/* Column 1: Pitch */}
         <div className="min-h-0">
           <PitchVisualization

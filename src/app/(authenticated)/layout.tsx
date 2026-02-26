@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { SidebarNav } from "@/components/sidebar-nav";
+import { MobileHeader } from "@/components/mobile-header";
 import { db } from "@/lib/db";
 
 export default async function AuthenticatedLayout({
@@ -16,11 +17,14 @@ export default async function AuthenticatedLayout({
     select: { displayName: true },
   });
 
+  const displayName = user?.displayName ?? "User";
+
   return (
-    <div className="flex min-h-screen">
-      <SidebarNav displayName={user?.displayName ?? "User"} />
-      <main className="flex-1 pl-56">
-        <div className="p-6">{children}</div>
+    <div className="flex min-h-screen flex-col md:flex-row">
+      <MobileHeader displayName={displayName} />
+      <SidebarNav displayName={displayName} />
+      <main className="flex-1 md:pl-56">
+        <div className="p-3 md:p-6">{children}</div>
       </main>
     </div>
   );

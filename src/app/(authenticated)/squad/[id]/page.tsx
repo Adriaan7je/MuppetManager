@@ -29,7 +29,7 @@ export default async function SquadViewPage({
     <div className="space-y-6">
       <div>
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-bold tracking-tight">{squad.name}</h1>
+          <h1 className="text-xl font-bold tracking-tight md:text-2xl">{squad.name}</h1>
           <Badge variant="outline">{squad.formation}</Badge>
         </div>
         <p className="text-sm text-muted-foreground">

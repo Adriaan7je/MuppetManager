@@ -19,7 +19,7 @@ export function SidebarNav({ displayName }: { displayName: string }) {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 z-40 flex h-screen w-56 flex-col border-r border-border bg-sidebar">
+    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-56 flex-col border-r border-border bg-sidebar md:flex">
       <div className="flex h-14 items-center gap-2 border-b border-sidebar-border px-4">
         <KermitIcon className="h-7 w-7 text-primary" />
         <span className="text-lg font-bold tracking-tight text-sidebar-foreground">

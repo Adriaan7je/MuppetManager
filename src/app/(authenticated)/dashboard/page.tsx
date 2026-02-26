@@ -14,9 +14,9 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div className="flex h-[calc(100vh-3rem)] flex-col">
+    <div className="flex flex-col md:h-[calc(100vh-3rem)]">
       <div className="mb-4 shrink-0">
-        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-xl font-bold tracking-tight md:text-2xl">Dashboard</h1>
         <p className="text-muted-foreground">
           Side-by-side view of all active squads
         </p>
@@ -56,7 +56,7 @@ export default async function DashboardPage() {
                     <Badge variant="outline">{squad.formation}</Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="flex min-h-0 flex-1 gap-4 pb-4">
+                <CardContent className="flex min-h-0 flex-1 flex-col gap-4 pb-4 sm:flex-row">
                   {/* Left: Pitch */}
                   <div className="min-h-0 min-w-0 flex-1">
                     <PitchVisualization
@@ -67,7 +67,7 @@ export default async function DashboardPage() {
                   </div>
 
                   {/* Right: Bench, Reserves, Budgets */}
-                  <div className="flex w-48 shrink-0 flex-col gap-3 overflow-y-auto">
+                  <div className="flex w-full shrink-0 flex-col gap-3 overflow-y-auto sm:w-48">
                     {/* Bench */}
                     <div>
                       <h3 className="mb-1 text-xs font-semibold text-muted-foreground">
