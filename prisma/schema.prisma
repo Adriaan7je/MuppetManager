@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String  @id @default(cuid())
+  username     String  @unique
+  passwordHash String
+  displayName  String
+  squads       Squad[]
+}
+
+model Player {
+  id                   Int           @id
+  name                 String
+  overall              Int
+  position             String
+  alternativePositions String[]
+  pace                 Int           @default(0)
+  shooting             Int           @default(0)
+  passing              Int           @default(0)
+  dribbling            Int           @default(0)
+  defending            Int           @default(0)
+  physical             Int           @default(0)
+  nation               String        @default("")
+  league               String        @default("")
+  team                 String        @default("")
+  age                  Int           @default(0)
+  height               Int           @default(0)
+  weight               Int           @default(0)
+  preferredFoot        String        @default("")
+  weakFoot             Int           @default(0)
+  skillMoves           Int           @default(0)
+  eaId                 Int?
+  imageUrl             String        @default("")
+  squadPlayers         SquadPlayer[]
+
+  @@index([overall])
+  @@index([position])
+  @@index([name])
+}
+
+enum SlotType {
+  FIRST_XI
+  BENCH
+  RESERVES
+}
+
+model Squad {
+  id        String        @id @default(cuid())
+  name      String
+  formation String        @default("4-3-3")
+  userId    String
+  isActive  Boolean       @default(false)
+  user      User          @relation(fields: [userId], references: [id])
+  players   SquadPlayer[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([userId])
+}
+
+model SquadPlayer {
+  id        String   @id @default(cuid())
+  squadId   String
+  playerId  Int
+  slotType  SlotType
+  slotIndex Int
+  squad     Squad    @relation(fields: [squadId], references: [id], onDelete: Cascade)
+  player    Player   @relation(fields: [playerId], references: [id])
+
+  @@unique([squadId, slotType, slotIndex])
+  @@unique([squadId, playerId])
+  @@index([squadId])
+}
+
+model GameSettings {
+  id              String @id @default("singleton")
+  firstXIBudget   Float  @default(1000000000)
+  benchBudget     Float  @default(400000000)
+  reservesBudget  Float  @default(100000000)
+  costBase        Float  @default(13723086)
+  costExponent    Float  @default(1.23)
+  costBaseRating  Int    @default(76)
+}

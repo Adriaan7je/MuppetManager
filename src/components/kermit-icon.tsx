@@ -1,0 +1,44 @@
+import { cn } from "@/lib/utils";
+
+export function KermitIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn("inline-block", className)}
+    >
+      {/* Head */}
+      <ellipse cx="50" cy="52" rx="28" ry="26" fill="currentColor" />
+      {/* Left eye bulge */}
+      <circle cx="32" cy="30" r="14" fill="currentColor" />
+      {/* Right eye bulge */}
+      <circle cx="68" cy="30" r="14" fill="currentColor" />
+      {/* Left eyeball */}
+      <circle cx="32" cy="28" r="9" fill="white" />
+      <circle cx="34" cy="27" r="4.5" fill="#1a1a2e" />
+      <circle cx="35.5" cy="25.5" r="1.5" fill="white" />
+      {/* Right eyeball */}
+      <circle cx="68" cy="28" r="9" fill="white" />
+      <circle cx="66" cy="27" r="4.5" fill="#1a1a2e" />
+      <circle cx="64.5" cy="25.5" r="1.5" fill="white" />
+      {/* Mouth */}
+      <path
+        d="M 26 58 Q 38 72 50 72 Q 62 72 74 58"
+        stroke="#1a5c2e"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* Collar / neck hint */}
+      <path
+        d="M 35 76 Q 50 82 65 76"
+        stroke="currentColor"
+        strokeWidth="4"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.5"
+      />
+    </svg>
+  );
+}
