@@ -33,6 +33,7 @@ export function PitchVisualization({
 }: PitchVisualizationProps) {
   const formationData = FORMATIONS[formation] ?? FORMATIONS["4-3-3"];
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [tappedIndex, setTappedIndex] = useState<number | null>(null);
 
   const playerMap = new Map<number, SquadPlayerWithPlayer>();
   for (const p of players) {
@@ -43,7 +44,7 @@ export function PitchVisualization({
 
   return (
     <TooltipProvider delayDuration={300}>
-    <div className="pitch-bg relative aspect-[3/4] h-full max-w-full overflow-hidden rounded-xl border border-white/10 shadow-lg">
+    <div className="pitch-bg relative aspect-[3/4] h-full max-w-full overflow-hidden rounded-xl border border-white/10 shadow-lg" onClick={() => setTappedIndex(null)}>
       {/* Pitch markings */}
       <svg
         viewBox="0 0 100 130"
@@ -98,7 +99,9 @@ export function PitchVisualization({
             }}
           >
             {squadPlayer ? (
-              <Tooltip>
+              <Tooltip open={tappedIndex === index ? true : undefined} onOpenChange={(open) => {
+                if (!open && tappedIndex === index) setTappedIndex(null);
+              }}>
                 <TooltipTrigger asChild>
                   <div
                     className={cn(
@@ -111,6 +114,7 @@ export function PitchVisualization({
                       e.dataTransfer.effectAllowed = "move";
                     }}
                     onDragEnd={() => setDragOverIndex(null)}
+                    onClick={() => setTappedIndex(tappedIndex === index ? null : index)}
                   >
                     <div className="relative">
                       <div
@@ -139,7 +143,10 @@ export function PitchVisualization({
                             e.stopPropagation();
                             onRemovePlayer(squadPlayer.id);
                           }}
-                          className="absolute -right-1 -top-1 hidden h-5 w-5 items-center justify-center rounded-full bg-destructive text-white shadow group-hover:flex"
+                          className={cn(
+                            "absolute -right-1 -top-1 h-5 w-5 items-center justify-center rounded-full bg-destructive text-white shadow",
+                            tappedIndex === index ? "flex" : "hidden group-hover:flex"
+                          )}
                         >
                           <X className="h-3 w-3" />
                         </button>
