@@ -114,7 +114,7 @@ export function PitchVisualization({
                       e.dataTransfer.effectAllowed = "move";
                     }}
                     onDragEnd={() => setDragOverIndex(null)}
-                    onClick={() => setTappedIndex(tappedIndex === index ? null : index)}
+                    onClick={(e) => { e.stopPropagation(); setTappedIndex(tappedIndex === index ? null : index); }}
                   >
                     <div className="relative">
                       <div
