@@ -139,8 +139,10 @@ export function PitchVisualization({
                       </span>
                       {!readOnly && onRemovePlayer && (
                         <button
-                          onClick={(e) => {
+                          onPointerDown={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
+                            setTappedIndex(null);
                             onRemovePlayer(squadPlayer.id);
                           }}
                           className={cn(
