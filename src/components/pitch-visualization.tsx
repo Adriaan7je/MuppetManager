@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { FORMATIONS, type FormationSlot } from "@/lib/formations";
 import { Plus, X } from "lucide-react";
@@ -204,12 +203,11 @@ function PlayerFaceImage({ eaId, name, overall }: { eaId: number; name: string; 
   }
 
   return (
-    <Image
+    <img
       src={`https://cdn.futbin.com/content/fifa26/img/players/${eaId}.png`}
       alt={name}
-      fill
-      sizes="56px"
-      className="rounded-full object-cover"
+      className="absolute inset-0 h-full w-full rounded-full object-cover"
+      referrerPolicy="no-referrer"
       onError={() => setFailed(true)}
       draggable={false}
     />
