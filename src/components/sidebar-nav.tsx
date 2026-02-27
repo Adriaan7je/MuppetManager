@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/squad", label: "My Squad", icon: Swords },
+  { href: "/squad", label: "Squads", icon: Swords },
   { href: "/players", label: "Players", icon: Users },
   { href: "/settings", label: "Settings", icon: Settings },
 ];

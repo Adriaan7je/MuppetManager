@@ -38,6 +38,10 @@ model Player {
   skillMoves           Int           @default(0)
   eaId                 Int?
   imageUrl             String        @default("")
+  countryCode          String        @default("")
+  clubLogoUrl          String        @default("")
+  playStyles           String[]
+  specialities         String[]
   squadPlayers         SquadPlayer[]
 
   @@index([overall])

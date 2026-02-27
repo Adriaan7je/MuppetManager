@@ -1,4 +1,4 @@
-import { getAllActiveSquads, getGameSettings } from "@/lib/queries";
+import { getAllFavoriteSquads, getGameSettings } from "@/lib/queries";
 import { calculateSquadBudgets } from "@/lib/budget";
 import { PitchVisualization } from "@/components/pitch-visualization";
 import { BudgetBar } from "@/components/budget-bar";
@@ -9,7 +9,7 @@ import type { SquadWithPlayers, SquadPlayerWithPlayer } from "@/types";
 
 export default async function DashboardPage() {
   const [squads, settings] = await Promise.all([
-    getAllActiveSquads(),
+    getAllFavoriteSquads(),
     getGameSettings(),
   ]);
 

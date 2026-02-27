@@ -31,6 +31,7 @@ async function main() {
     where: { username: "stef" },
     update: {},
     create: {
+      id: "user-stef",
       username: "stef",
       passwordHash: passwordHash1,
       displayName: "Stef",
@@ -41,6 +42,7 @@ async function main() {
     where: { username: "karsten" },
     update: {},
     create: {
+      id: "user-karsten",
       username: "karsten",
       passwordHash: passwordHash2,
       displayName: "Karsten",
@@ -74,60 +76,46 @@ async function main() {
   });
   console.log("✅ Default squads created");
 
-  // Seed Players
-  let count = 0;
-  for (const player of players) {
-    await prisma.player.upsert({
-      where: { id: player.id },
-      update: {
-        name: player.name,
-        overall: player.overall,
-        position: player.position,
-        alternativePositions: player.alternativePositions,
-        pace: player.pace,
-        shooting: player.shooting,
-        passing: player.passing,
-        dribbling: player.dribbling,
-        defending: player.defending,
-        physical: player.physical,
-        nation: player.nation,
-        league: player.league,
-        team: player.team,
-        age: player.age,
-        height: player.height,
-        weight: player.weight,
-        preferredFoot: player.preferredFoot,
-        weakFoot: player.weakFoot,
-        skillMoves: player.skillMoves,
-        eaId: (player as Record<string, unknown>).eaId as number | undefined ?? null,
-      },
-      create: {
-        id: player.id,
-        name: player.name,
-        overall: player.overall,
-        position: player.position,
-        alternativePositions: player.alternativePositions,
-        pace: player.pace,
-        shooting: player.shooting,
-        passing: player.passing,
-        dribbling: player.dribbling,
-        defending: player.defending,
-        physical: player.physical,
-        nation: player.nation,
-        league: player.league,
-        team: player.team,
-        age: player.age,
-        height: player.height,
-        weight: player.weight,
-        preferredFoot: player.preferredFoot,
-        weakFoot: player.weakFoot,
-        skillMoves: player.skillMoves,
-        eaId: (player as Record<string, unknown>).eaId as number | undefined ?? null,
-      },
+  // Seed Players — clear stale data then bulk insert
+  await prisma.squadPlayer.deleteMany();
+  await prisma.player.deleteMany();
+  console.log("🗑️  Cleared existing players & squad assignments");
+
+  const BATCH = 500;
+  for (let i = 0; i < players.length; i += BATCH) {
+    const batch = players.slice(i, i + BATCH);
+    await prisma.player.createMany({
+      data: batch.map((p) => ({
+        id: p.id,
+        name: p.name,
+        overall: p.overall,
+        position: p.position,
+        alternativePositions: p.alternativePositions,
+        pace: p.pace,
+        shooting: p.shooting,
+        passing: p.passing,
+        dribbling: p.dribbling,
+        defending: p.defending,
+        physical: p.physical,
+        nation: p.nation,
+        league: p.league,
+        team: p.team,
+        age: p.age,
+        height: p.height,
+        weight: p.weight,
+        preferredFoot: p.preferredFoot,
+        weakFoot: p.weakFoot,
+        skillMoves: p.skillMoves,
+        eaId: (p as Record<string, unknown>).eaId as number | undefined ?? null,
+        imageUrl: (p as Record<string, unknown>).imageUrl as string | undefined ?? "",
+        countryCode: (p as Record<string, unknown>).countryCode as string | undefined ?? "",
+        clubLogoUrl: (p as Record<string, unknown>).clubLogoUrl as string | undefined ?? "",
+        playStyles: (p as Record<string, unknown>).playStyles as string[] | undefined ?? [],
+        specialities: (p as Record<string, unknown>).specialities as string[] | undefined ?? [],
+      })),
     });
-    count++;
   }
-  console.log(`✅ ${count} players seeded`);
+  console.log(`✅ ${players.length} players seeded`);
 
   console.log("🎉 Seeding complete!");
 }

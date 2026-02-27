@@ -33,7 +33,7 @@ export async function getUserSquads() {
   });
 }
 
-export async function getAllActiveSquads() {
+export async function getAllFavoriteSquads() {
   return db.squad.findMany({
     where: { isActive: true },
     include: {

@@ -251,18 +251,15 @@ export async function swapSlots(formData: {
 export async function createSquad(name: string) {
   const userId = await getAuthUser();
 
-  // Deactivate current active squad
-  await db.squad.updateMany({
-    where: { userId, isActive: true },
-    data: { isActive: false },
-  });
+  // Only mark as favorite if it's the user's first squad
+  const existingCount = await db.squad.count({ where: { userId } });
 
   const squad = await db.squad.create({
     data: {
       name,
       formation: "4-3-3",
       userId,
-      isActive: true,
+      isActive: existingCount === 0,
     },
   });
 
@@ -271,7 +268,7 @@ export async function createSquad(name: string) {
   return { success: true, squadId: squad.id };
 }
 
-export async function setActiveSquad(squadId: string) {
+export async function setFavoriteSquad(squadId: string) {
   const userId = await getAuthUser();
   await verifySquadOwnership(squadId, userId);
 
@@ -292,15 +289,37 @@ export async function setActiveSquad(squadId: string) {
 
 export async function deleteSquad(squadId: string) {
   const userId = await getAuthUser();
-  await verifySquadOwnership(squadId, userId);
+  const squad = await verifySquadOwnership(squadId, userId);
+  const wasFavorite = squad.isActive;
 
   await db.squad.delete({ where: { id: squadId } });
 
-  // Ensure user has an active squad
-  const remaining = await db.squad.findFirst({ where: { userId } });
-  if (remaining) {
-    await db.squad.update({ where: { id: remaining.id }, data: { isActive: true } });
+  // If deleted squad was the favorite, promote another
+  if (wasFavorite) {
+    const next = await db.squad.findFirst({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+    });
+    if (next) {
+      await db.squad.update({ where: { id: next.id }, data: { isActive: true } });
+    }
   }
+
+  revalidatePath("/squad");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+export async function renameSquad(squadId: string, name: string) {
+  const userId = await getAuthUser();
+  await verifySquadOwnership(squadId, userId);
+
+  if (!name.trim()) return { error: "Name cannot be empty" };
+
+  await db.squad.update({
+    where: { id: squadId },
+    data: { name: name.trim() },
+  });
 
   revalidatePath("/squad");
   revalidatePath("/dashboard");

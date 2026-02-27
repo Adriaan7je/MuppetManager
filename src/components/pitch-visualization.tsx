@@ -137,6 +137,15 @@ export function PitchVisualization({
                       )}>
                         {squadPlayer.player.overall}
                       </span>
+                      {squadPlayer.player.clubLogoUrl && (
+                        <img
+                          src={squadPlayer.player.clubLogoUrl}
+                          alt={squadPlayer.player.team}
+                          className="absolute -bottom-1.5 -right-2.5 h-8 w-8 object-contain drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+                          referrerPolicy="no-referrer"
+                          draggable={false}
+                        />
+                      )}
                       {!readOnly && onRemovePlayer && (
                         <button
                           onPointerDown={(e) => {
@@ -268,8 +277,25 @@ function PlayerStatTooltip({ player }: { player: Player }) {
       </div>
 
       {/* Meta */}
-      <div className="text-[10px] text-background/50">
-        {player.nation} · {player.team} · {player.age} yr
+      <div className="flex items-center gap-2 text-[10px] text-background/50">
+        {player.countryCode && (
+          <img
+            src={`https://flagcdn.com/24x18/${player.countryCode}.png`}
+            alt={player.nation}
+            className="inline-block h-[18px] w-6 object-cover"
+            draggable={false}
+          />
+        )}
+        {player.clubLogoUrl && (
+          <img
+            src={player.clubLogoUrl}
+            alt={player.team}
+            className="inline-block h-5 w-5 object-contain"
+            referrerPolicy="no-referrer"
+            draggable={false}
+          />
+        )}
+        <span>{player.age} yr</span>
       </div>
 
       {/* Positions */}
@@ -296,6 +322,20 @@ function PlayerStatTooltip({ player }: { player: Player }) {
           </div>
         ))}
       </div>
+
+      {/* PlayStyles */}
+      {player.playStyles?.length > 0 && (
+        <div className="flex flex-wrap gap-1 border-t border-background/10 pt-2">
+          {player.playStyles.map((ps) => (
+            <span
+              key={ps}
+              className="rounded bg-primary/15 px-1.5 py-0.5 text-[9px] font-medium text-primary"
+            >
+              {ps}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Footer */}
       <div className="flex items-center gap-3 border-t border-background/10 pt-2 text-[10px]">

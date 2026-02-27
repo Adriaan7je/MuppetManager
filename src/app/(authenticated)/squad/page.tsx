@@ -1,4 +1,4 @@
-import { getActiveSquad, getGameSettings } from "@/lib/queries";
+import { getUserSquads, getGameSettings } from "@/lib/queries";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { SquadBuilder } from "./squad-builder";
@@ -7,14 +7,14 @@ export default async function SquadPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
-  const [squad, settings] = await Promise.all([
-    getActiveSquad(),
+  const [squads, settings] = await Promise.all([
+    getUserSquads(),
     getGameSettings(),
   ]);
 
   return (
     <SquadBuilder
-      squad={squad}
+      squads={squads}
       settings={settings}
       userId={session.user.id}
     />
